@@ -1,0 +1,40 @@
+docker run --name=first-image-launch -p8085:8085 -d first-image:latest
+
+docker volume create mysql_data
+docker volume create mysql_config
+docker network create mysqlnet
+
+docker run -it --rm -d -v mysql_data:/var/lib/mysql \
+-v mysql_config:/etc/mysql/conf.d \
+--network mysqlnet \
+--name mysqlserver \
+-e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic \
+-e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic \
+-p 3336:3306 mysql:8.0
+
+
+docker run --rm -d \
+--name springboot-server \
+--network mysqlnet \
+-e MYSQL_URL=jdbc:mysql://mysqlserver/petclinic \
+-p 8085:8085 first-image-launch
+
+curl  --request GET \
+  --url http://localhost:8085/vets \
+  --header 'content-type: application/json'
+  
+  curl -SL https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+  
+  
+  curl  --request GET \
+  --url http://localhost:8085/vets \
+  --header 'content-type: application/json'
+  
+  docker run -it --rm --name springboot-test first-image ./mvnw test
+  
+  docker build -t first-image --target test .
+  
+  docker run -it --rm --name springboot-test first-image 
+  
+  docker build -t first-image --target test .
+  
